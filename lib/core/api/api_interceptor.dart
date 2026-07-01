@@ -6,22 +6,47 @@ class ApiInterceptor extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    _logger.i("${options.method} ${options.uri}");
+    final query = Map<String, dynamic>.from(options.queryParameters);
 
-    super.onRequest(options, handler);
+    if (query.containsKey('apikey')) {
+      query['apikey'] = '******';
+    }
+
+    _logger.i('''
+========== REQUEST ==========
+${options.method}
+${options.uri.replace(queryParameters: query)}
+
+Headers:
+${options.headers}
+=============================
+''');
+
+    handler.next(options);
   }
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    _logger.i(response.statusCode);
+    _logger.i('''
+========== RESPONSE ==========
+Status Code : ${response.statusCode}
+Path        : ${response.requestOptions.path}
+==============================
+''');
 
-    super.onResponse(response, handler);
+    handler.next(response);
   }
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    _logger.e(err.message);
+    _logger.e('''
+========== ERROR ==========
+${err.requestOptions.path}
 
-    super.onError(err, handler);
+${err.message}
+===========================
+''');
+
+    handler.next(err);
   }
 }
