@@ -1,0 +1,20 @@
+import 'package:dio/dio.dart';
+
+import '../config/app_config.dart';
+import 'api_interceptor.dart';
+
+class DioClient {
+  late final Dio dio;
+
+  DioClient() {
+    dio = Dio(
+      BaseOptions(
+        baseUrl: AppConfig.baseUrl,
+        connectTimeout: const Duration(seconds: 30),
+        receiveTimeout: const Duration(seconds: 30),
+      ),
+    );
+
+    dio.interceptors.add(ApiInterceptor());
+  }
+}
