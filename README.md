@@ -1,16 +1,169 @@
-# vietpay_app
+# VietpayApp Currency Converter
 
-A new Flutter project.
+A production-ready Flutter application demonstrating an Offline-First architecture.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- Fetch latest exchange rates from CurrencyFreaks API
+- Offline-first using Drift Database
+- Currency Converter
+- Saved Currency Dashboard
+- Material 3
+- Dark / Light Theme
+- MVVM + Repository + BLoC
+- Dependency Injection using GetIt
 
-A few resources to get you started if this is your first Flutter project:
+---
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Architecture
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```
+lib
+
+app/
+
+core/
+    api/
+    database/
+    di/
+    theme/
+
+features/
+    currency/
+        bloc/
+        datasource/
+            remote/
+            local/
+        mapper/
+        models/
+        repository/
+        pages/
+        widgets/
+```
+
+---
+
+## Tech Stack
+
+- Flutter 3.32
+- Dart 3.8
+- flutter_bloc
+- Dio
+- Drift
+- SQLite
+- GetIt
+- Logger
+- flutter_dotenv
+
+---
+
+## Offline First
+
+Application flow
+
+```
+Launch App
+
+↓
+
+API
+
+↓
+
+Success
+
+↓
+
+Save Drift
+
+↓
+
+Show UI
+
+↓
+
+Offline
+
+↓
+
+Load Drift
+
+↓
+
+Show Cached Data
+```
+
+---
+
+## Theme
+
+Supports
+
+- Material 3
+- Dark Mode
+- Light Mode
+
+---
+
+## Run
+
+Clone
+
+```
+git clone ...
+```
+
+Install
+
+```
+flutter pub get
+```
+
+Generate Drift
+
+```
+dart run build_runner build
+```
+
+Run
+
+```
+flutter run
+```
+
+---
+
+## Environment
+
+Create
+
+```
+.env
+```
+
+```
+API_KEY=YOUR_API_KEY
+BASE_URL=https://api.currencyfreaks.com/v2.0
+```
+
+---
+
+## Git History
+
+```
+Initial Flutter project
+
+Setup application foundation
+
+Implement remote API layer
+
+Implement offline cache with Drift
+
+Integrate BLoC state management
+
+Build currency converter dashboard
+
+Implement currency conversion feature
+
+Add Material 3 theme support
+```
