@@ -1,52 +1,75 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:vietpay_app/core/constants/app_constants.dart';
 import '../../../core/di/service_locator.dart';
-import '../repository/currency_repository.dart';
+import '../bloc/currency_bloc.dart';
+import '../bloc/currency_event.dart';
+import '../bloc/currency_state.dart';
+import '../widgets/currency_list.dart';
+import '../widgets/last_updated_widget.dart';
+import '../widgets/offline_banner.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => sl<CurrencyBloc>()..add(const LoadCurrencies()),
+      child: const HomeView(),
+    );
+  }
 }
 
-class _HomePageState extends State<HomePage> {
-  @override
-  void initState() {
-    super.initState();
-    _loadCurrencyRates();
-  }
-
-  Future<void> _loadCurrencyRates() async {
-    try {
-      final repository = sl<CurrencyRepository>();
-
-      final result = await repository.fetchLatestRates();
-
-      debugPrint("========== RESULT ==========");
-
-      debugPrint("Total currencies: ${result.currencies.length}");
-      debugPrint("From cache: ${result.isFromCache}");
-      debugPrint("Updated at: ${result.updatedAt}");
-
-      if (result.currencies.isNotEmpty) {
-        debugPrint(
-          "First currency: ${result.currencies.first.code} - ${result.currencies.first.rate}",
-        );
-      }
-
-      debugPrint("============================");
-    } catch (e) {
-      debugPrint("Error: $e");
-    }
-  }
+class HomeView extends StatelessWidget {
+  const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text(AppConstants.appName)),
-      body: const Center(
-        child: Text("Welcome to VietpayApp's currency converter app."),
+      appBar: AppBar(
+        title: const Text(AppConstants.appName),
+        centerTitle: true,
+      ),
+      body: BlocBuilder<CurrencyBloc, CurrencyState>(
+        builder: (context, state) {
+          /// Loading
+          if (state is CurrencyLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          /// Error
+          if (state is CurrencyError) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  state.message,
+                  style: const TextStyle(color: Colors.red),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            );
+          }
+
+          /// Loaded
+          if (state is CurrencyLoaded) {
+            return Column(
+              children: [
+                if (state.isOffline) const OfflineBanner(),
+
+                LastUpdatedWidget(updatedAt: state.updatedAt),
+
+                const Divider(height: 1),
+
+                Expanded(child: CurrencyList(currencies: state.currencies)),
+              ],
+            );
+          }
+
+          return const SizedBox.shrink();
+        },
       ),
     );
   }
