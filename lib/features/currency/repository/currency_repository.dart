@@ -1,5 +1,5 @@
-import '../models/currency_response.dart';
+import '../models/currency_result.dart';
 
 abstract class CurrencyRepository {
-  Future<CurrencyResponse> fetchLatestRates();
+  Future<CurrencyResult> fetchLatestRates();
 }
