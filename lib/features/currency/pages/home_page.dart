@@ -66,19 +66,15 @@ class _LoadedView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final rates = {
-      for (final currency in state.currencies) currency.code: currency.rate,
-    };
-
     return Column(
       children: [
         if (state.isOffline) const OfflineBanner(),
 
         LastUpdatedWidget(updatedAt: state.updatedAt),
 
-        SavedCurrencyCard(rates: rates),
+        SavedCurrencyCard(currencies: state.currencies),
 
-        ConverterSection(rates: rates),
+        ConverterSection(currencies: state.currencies),
 
         Expanded(child: CurrencyList(currencies: state.currencies)),
       ],

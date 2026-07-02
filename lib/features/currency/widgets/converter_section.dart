@@ -1,114 +1,249 @@
 import 'package:flutter/material.dart';
 
-class ConverterSection extends StatefulWidget {
-  final Map<String, double> rates;
+import '../models/currency_model.dart';
+import 'package:intl/intl.dart';
 
-  const ConverterSection({super.key, required this.rates});
+class ConverterSection extends StatefulWidget {
+  final List<CurrencyModel> currencies;
+
+  const ConverterSection({super.key, required this.currencies});
 
   @override
   State<ConverterSection> createState() => _ConverterSectionState();
 }
 
 class _ConverterSectionState extends State<ConverterSection> {
-  final controller = TextEditingController(text: "100");
+  final TextEditingController amountController = TextEditingController(
+    text: "100",
+  );
 
-  String from = "USD";
+  double _convertedAmount = 0;
 
-  String to = "VND";
+  late final NumberFormat _formatter;
 
-  double result = 0;
+  late CurrencyModel fromCurrency;
+
+  late CurrencyModel toCurrency;
 
   @override
   void initState() {
     super.initState();
 
+    fromCurrency = widget.currencies.first;
+
+    toCurrency = widget.currencies.firstWhere(
+      (e) => e.code == "VND",
+      orElse: () => widget.currencies[1],
+    );
+
+    _formatter = NumberFormat("#,##0.######");
+
+    amountController.addListener(_convert);
+
     _convert();
   }
 
+  @override
+  void dispose() {
+    amountController.dispose();
+    super.dispose();
+  }
+
   void _convert() {
-    final amount = double.tryParse(controller.text) ?? 0;
+    final amount = double.tryParse(amountController.text) ?? 0;
 
-    final fromRate = widget.rates[from] ?? 1;
+    if (amount <= 0) {
+      setState(() {
+        _convertedAmount = 0;
+      });
+      return;
+    }
 
-    final toRate = widget.rates[to] ?? 1;
+    final usdAmount = amount / fromCurrency.rate;
 
-    final usd = amount / fromRate;
+    final result = usdAmount * toCurrency.rate;
 
-    result = usd * toRate;
+    setState(() {
+      _convertedAmount = result;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final currencies = widget.rates.keys.toList();
-
     return Card(
-      margin: const EdgeInsets.all(16),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
 
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(20),
 
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+
           children: [
-            TextField(
-              controller: controller,
+            Text(
+              "Currency Converter",
 
-              keyboardType: TextInputType.number,
-
-              decoration: const InputDecoration(labelText: "Amount"),
-
-              onChanged: (_) {
-                setState(() {
-                  _convert();
-                });
-              },
+              style: Theme.of(context).textTheme.titleMedium,
             ),
 
             const SizedBox(height: 20),
 
-            DropdownButton<String>(
-              value: from,
+            TextField(
+              controller: amountController,
 
-              isExpanded: true,
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
 
-              items: currencies.map((e) {
-                return DropdownMenuItem(value: e, child: Text(e));
-              }).toList(),
+              decoration: const InputDecoration(
+                labelText: "Amount",
 
-              onChanged: (value) {
-                setState(() {
-                  from = value!;
+                border: OutlineInputBorder(),
+              ),
+            ),
 
-                  _convert();
-                });
-              },
+            const SizedBox(height: 20),
+
+            Row(
+              children: [
+                Expanded(
+                  child: DropdownButtonFormField<CurrencyModel>(
+                    value: fromCurrency,
+
+                    decoration: const InputDecoration(
+                      labelText: "From",
+
+                      border: OutlineInputBorder(),
+                    ),
+
+                    items: widget.currencies
+                        .map(
+                          (currency) => DropdownMenuItem(
+                            value: currency,
+
+                            child: Text(currency.code),
+                          ),
+                        )
+                        .toList(),
+
+                    onChanged: (value) {
+                      if (value == null) return;
+
+                      setState(() {
+                        fromCurrency = value;
+
+                        _convert();
+                      });
+                    },
+                  ),
+                ),
+
+                const SizedBox(width: 12),
+
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      final temp = fromCurrency;
+
+                      fromCurrency = toCurrency;
+
+                      toCurrency = temp;
+
+                      _convert();
+                    });
+                  },
+
+                  icon: const Icon(Icons.swap_horiz),
+                ),
+
+                const SizedBox(width: 12),
+
+                Expanded(
+                  child: DropdownButtonFormField<CurrencyModel>(
+                    value: toCurrency,
+
+                    decoration: const InputDecoration(
+                      labelText: "To",
+
+                      border: OutlineInputBorder(),
+                    ),
+
+                    items: widget.currencies
+                        .map(
+                          (currency) => DropdownMenuItem(
+                            value: currency,
+
+                            child: Text(currency.code),
+                          ),
+                        )
+                        .toList(),
+
+                    onChanged: (value) {
+                      if (value == null) return;
+
+                      setState(() {
+                        toCurrency = value;
+
+                        _convert();
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 24),
+
+            const Divider(),
+
+            const SizedBox(height: 12),
+
+            Text(
+              "Converted Amount",
+
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+
+            const SizedBox(height: 10),
+
+            Text(
+              "${amountController.text} ${fromCurrency.code}",
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
 
             const SizedBox(height: 12),
 
-            DropdownButton<String>(
-              value: to,
+            Container(
+              width: double.infinity,
 
-              isExpanded: true,
+              padding: const EdgeInsets.all(16),
 
-              items: currencies.map((e) {
-                return DropdownMenuItem(value: e, child: Text(e));
-              }).toList(),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surfaceContainerHighest,
 
-              onChanged: (value) {
-                setState(() {
-                  to = value!;
+                borderRadius: BorderRadius.circular(12),
+              ),
 
-                  _convert();
-                });
-              },
-            ),
+              child: Center(
+                child: Column(
+                  children: [
+                    Text(
+                      _formatter.format(_convertedAmount),
+                      style: const TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
 
-            const SizedBox(height: 20),
+                    const SizedBox(height: 6),
 
-            Text(
-              result.toStringAsFixed(2),
-
-              style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                    Text(
+                      toCurrency.code,
+                      style: const TextStyle(fontSize: 18, color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         ),

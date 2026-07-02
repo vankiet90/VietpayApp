@@ -1,21 +1,26 @@
 import 'package:flutter/material.dart';
 
-class SavedCurrencyCard extends StatelessWidget {
-  final Map<String, double> rates;
+import '../models/currency_model.dart';
 
-  const SavedCurrencyCard({super.key, required this.rates});
+class SavedCurrencyCard extends StatelessWidget {
+  final List<CurrencyModel> currencies;
+
+  const SavedCurrencyCard({super.key, required this.currencies});
 
   @override
   Widget build(BuildContext context) {
-    const savedCurrency = "JPY";
+    final jpy = currencies.firstWhere(
+      (e) => e.code == "JPY",
+      orElse: () => currencies.first,
+    );
 
-    final rate = rates[savedCurrency] ?? 0;
-
-    final usd = rate == 0 ? 0 : 1 / rate;
+    // CurrencyFreaks return base = USD
+    // jpy.rate =  JPY for 1 USD
+    // => 1 JPY = 1 / rate USD
+    final usdRate = 1 / jpy.rate;
 
     return Card(
       margin: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-      elevation: 3,
       child: Padding(
         padding: const EdgeInsets.all(18),
         child: Column(
@@ -23,30 +28,42 @@ class SavedCurrencyCard extends StatelessWidget {
           children: [
             Text(
               "Saved Currency",
-              style: Theme.of(context).textTheme.titleSmall,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
-            const SizedBox(height: 12),
+
+            const SizedBox(height: 20),
+
             Row(
               children: [
+                const Icon(Icons.bookmark, color: Colors.orange),
+
+                const SizedBox(width: 12),
+
                 Text(
-                  savedCurrency,
+                  jpy.code,
                   style: const TextStyle(
-                    fontSize: 22,
+                    fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+
                 const Spacer(),
+
                 const Icon(Icons.arrow_forward),
+
                 const SizedBox(width: 8),
+
                 const Text(
                   "USD",
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
+
             const SizedBox(height: 20),
+
             Text(
-              "1 $savedCurrency = ${usd.toStringAsFixed(6)} USD",
+              "1 ${jpy.code} = ${usdRate.toStringAsFixed(6)} USD",
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           ],
