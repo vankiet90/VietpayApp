@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vietpay_app/core/constants/app_constants.dart';
 import '../../../core/di/service_locator.dart';
 import '../repository/currency_repository.dart';
 
@@ -13,10 +14,10 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _testApi();
+    _loadCurrencyRates();
   }
 
-  Future<void> _testApi() async {
+  Future<void> _loadCurrencyRates() async {
     final repository = sl<CurrencyRepository>();
 
     final response = await repository.fetchLatestRates();
@@ -30,8 +31,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Currency Converter")),
-      body: const Center(child: Text("Sprint 2")),
+      appBar: AppBar(title: const Text(AppConstants.appName)),
+      body: const Center(
+        child: Text("Welcome to VietpayApp's currency converter app."),
+      ),
     );
   }
 }
