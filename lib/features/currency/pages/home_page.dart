@@ -66,18 +66,31 @@ class _LoadedView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        if (state.isOffline) const OfflineBanner(),
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (state.isOffline) const OfflineBanner(),
 
-        LastUpdatedWidget(updatedAt: state.updatedAt),
+          LastUpdatedWidget(updatedAt: state.updatedAt),
 
-        SavedCurrencyCard(currencies: state.currencies),
+          SavedCurrencyCard(currencies: state.currencies),
 
-        ConverterSection(currencies: state.currencies),
+          ConverterSection(currencies: state.currencies),
 
-        Expanded(child: CurrencyList(currencies: state.currencies)),
-      ],
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Text(
+              "Currencies",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ),
+
+          CurrencyList(currencies: state.currencies),
+
+          const SizedBox(height: 24),
+        ],
+      ),
     );
   }
 }
