@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:vietpay_app/core/constants/app_constants.dart';
 import '../../../core/di/service_locator.dart';
 import '../bloc/currency_bloc.dart';
 import '../bloc/currency_event.dart';
 import '../bloc/currency_state.dart';
+import '../widgets/converter_section.dart';
 import '../widgets/currency_list.dart';
 import '../widgets/last_updated_widget.dart';
 import '../widgets/offline_banner.dart';
+import '../widgets/saved_currency_card.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -29,48 +30,58 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(AppConstants.appName),
+        title: const Text("Currency Converter"),
         centerTitle: true,
       ),
       body: BlocBuilder<CurrencyBloc, CurrencyState>(
         builder: (context, state) {
-          /// Loading
           if (state is CurrencyLoading) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          /// Error
           if (state is CurrencyError) {
             return Center(
               child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Text(
-                  state.message,
-                  style: const TextStyle(color: Colors.red),
-                  textAlign: TextAlign.center,
-                ),
+                padding: const EdgeInsets.all(20),
+                child: Text(state.message, textAlign: TextAlign.center),
               ),
             );
           }
 
-          /// Loaded
           if (state is CurrencyLoaded) {
-            return Column(
-              children: [
-                if (state.isOffline) const OfflineBanner(),
-
-                LastUpdatedWidget(updatedAt: state.updatedAt),
-
-                const Divider(height: 1),
-
-                Expanded(child: CurrencyList(currencies: state.currencies)),
-              ],
-            );
+            return _LoadedView(state: state);
           }
 
           return const SizedBox.shrink();
         },
       ),
+    );
+  }
+}
+
+class _LoadedView extends StatelessWidget {
+  final CurrencyLoaded state;
+
+  const _LoadedView({required this.state});
+
+  @override
+  Widget build(BuildContext context) {
+    final rates = {
+      for (final currency in state.currencies) currency.code: currency.rate,
+    };
+
+    return Column(
+      children: [
+        if (state.isOffline) const OfflineBanner(),
+
+        LastUpdatedWidget(updatedAt: state.updatedAt),
+
+        SavedCurrencyCard(rates: rates),
+
+        ConverterSection(rates: rates),
+
+        Expanded(child: CurrencyList(currencies: state.currencies)),
+      ],
     );
   }
 }
