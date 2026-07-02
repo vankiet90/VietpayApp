@@ -14,5 +14,21 @@ class CurrencyBloc extends Bloc<CurrencyEvent, CurrencyState> {
   Future<void> _onLoadCurrencies(
     LoadCurrencies event,
     Emitter<CurrencyState> emit,
-  ) async {}
+  ) async {
+    emit(CurrencyLoading());
+
+    try {
+      final result = await repository.fetchLatestRates();
+
+      emit(
+        CurrencyLoaded(
+          currencies: result.currencies,
+          isOffline: result.isFromCache,
+          updatedAt: result.updatedAt,
+        ),
+      );
+    } catch (e) {
+      emit(CurrencyError(e.toString()));
+    }
+  }
 }
