@@ -35,7 +35,10 @@ class SavedCurrencyCard extends StatelessWidget {
 
             Row(
               children: [
-                const Icon(Icons.bookmark, color: Colors.orange),
+                Icon(
+                  Icons.bookmark,
+                  color: Theme.of(context).colorScheme.primaryContainer,
+                ),
 
                 const SizedBox(width: 12),
 

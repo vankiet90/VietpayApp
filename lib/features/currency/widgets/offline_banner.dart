@@ -7,7 +7,7 @@ class OfflineBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      color: Colors.orange,
+      color: Theme.of(context).colorScheme.tertiaryContainer,
       padding: const EdgeInsets.all(12),
       child: const Text(
         "Using Cached Data",

@@ -11,10 +11,13 @@ class VietpayApp extends StatelessWidget {
     return MaterialApp(
       title: 'Currency Converter',
       debugShowCheckedModeBanner: false,
+
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
-      onGenerateRoute: AppRouter.generateRoute,
+      themeMode: ThemeMode.system,
+
       initialRoute: '/',
+      onGenerateRoute: AppRouter.generateRoute,
     );
   }
 }

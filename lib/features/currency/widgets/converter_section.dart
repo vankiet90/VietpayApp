@@ -71,6 +71,7 @@ class _ConverterSectionState extends State<ConverterSection> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      clipBehavior: Clip.antiAlias,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
 
       child: Padding(
