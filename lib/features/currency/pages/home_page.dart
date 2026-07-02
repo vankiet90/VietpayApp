@@ -18,14 +18,27 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _loadCurrencyRates() async {
-    final repository = sl<CurrencyRepository>();
+    try {
+      final repository = sl<CurrencyRepository>();
 
-    final response = await repository.fetchLatestRates();
+      final result = await repository.fetchLatestRates();
 
-    debugPrint("Base: ${response.base}");
-    debugPrint("Date: ${response.date}");
-    debugPrint("Total rates: ${response.rates.length}");
-    debugPrint("USD -> VND: ${response.rates['VND']}");
+      debugPrint("========== RESULT ==========");
+
+      debugPrint("Total currencies: ${result.currencies.length}");
+      debugPrint("From cache: ${result.isFromCache}");
+      debugPrint("Updated at: ${result.updatedAt}");
+
+      if (result.currencies.isNotEmpty) {
+        debugPrint(
+          "First currency: ${result.currencies.first.code} - ${result.currencies.first.rate}",
+        );
+      }
+
+      debugPrint("============================");
+    } catch (e) {
+      debugPrint("Error: $e");
+    }
   }
 
   @override
