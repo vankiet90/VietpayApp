@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../features/currency/bloc/currency_bloc.dart';
 import '../../features/currency/datasource/local/currency_local_datasource.dart';
 import '../api/dio_client.dart';
 import '../../features/currency/datasource/remote/currency_remote_datasource.dart';
@@ -27,4 +28,6 @@ Future<void> setupLocator() async {
   sl.registerLazySingleton<CurrencyRepository>(
     () => CurrencyRepositoryImpl(sl(), sl()),
   );
+
+  sl.registerFactory(() => CurrencyBloc(sl()));
 }
