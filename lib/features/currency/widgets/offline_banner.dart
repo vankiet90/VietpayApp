@@ -6,6 +6,7 @@ class OfflineBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      key: const Key("offline_banner"),
       width: double.infinity,
       color: Theme.of(context).colorScheme.tertiaryContainer,
       padding: const EdgeInsets.all(12),

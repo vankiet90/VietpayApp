@@ -13,6 +13,7 @@ class LastUpdatedWidget extends StatelessWidget {
       child: Align(
         alignment: Alignment.centerLeft,
         child: Text(
+          key: const Key("last_updated"),
           "Last Updated: ${DateFormat('dd/MM/yyyy HH:mm').format(updatedAt)}",
           style: Theme.of(context).textTheme.bodySmall,
         ),

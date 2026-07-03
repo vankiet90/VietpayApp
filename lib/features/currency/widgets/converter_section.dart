@@ -90,6 +90,7 @@ class _ConverterSectionState extends State<ConverterSection> {
             const SizedBox(height: 20),
 
             TextField(
+              key: const Key("amount_input"),
               controller: amountController,
 
               keyboardType: const TextInputType.numberWithOptions(
@@ -109,6 +110,7 @@ class _ConverterSectionState extends State<ConverterSection> {
               children: [
                 Expanded(
                   child: DropdownButtonFormField<CurrencyModel>(
+                    key: const Key("from_currency"),
                     value: fromCurrency,
 
                     decoration: const InputDecoration(
@@ -142,6 +144,7 @@ class _ConverterSectionState extends State<ConverterSection> {
                 const SizedBox(width: 12),
 
                 IconButton(
+                  key: const Key("swap_button"),
                   onPressed: () {
                     setState(() {
                       final temp = fromCurrency;
@@ -161,6 +164,7 @@ class _ConverterSectionState extends State<ConverterSection> {
 
                 Expanded(
                   child: DropdownButtonFormField<CurrencyModel>(
+                    key: const Key("to_currency"),
                     value: toCurrency,
 
                     decoration: const InputDecoration(
@@ -215,6 +219,7 @@ class _ConverterSectionState extends State<ConverterSection> {
             const SizedBox(height: 12),
 
             Container(
+              key: const Key("converted_result"),
               width: double.infinity,
 
               padding: const EdgeInsets.all(16),

@@ -11,6 +11,7 @@ class CurrencyList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
+      key: const Key("currency_list"),
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: currencies.length,

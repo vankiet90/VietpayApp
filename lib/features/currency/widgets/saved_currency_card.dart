@@ -20,6 +20,7 @@ class SavedCurrencyCard extends StatelessWidget {
     final usdRate = 1 / jpy.rate;
 
     return Card(
+      key: const Key("saved_currency_card"),
       margin: const EdgeInsets.fromLTRB(16, 8, 16, 8),
       child: Padding(
         padding: const EdgeInsets.all(18),

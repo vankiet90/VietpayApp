@@ -10,6 +10,7 @@ class CurrencyItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      key: Key(currency.code),
       leading: CircleAvatar(child: Text(currency.code.substring(0, 1))),
       title: Text(
         currency.code,
