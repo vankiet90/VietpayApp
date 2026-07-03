@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import '../datasource/local/currency_local_datasource.dart';
 import '../datasource/remote/currency_remote_datasource.dart';
 import '../mapper/currency_mapper.dart';
@@ -24,8 +25,12 @@ class CurrencyRepositoryImpl implements CurrencyRepository {
         isFromCache: false,
         updatedAt: DateTime.now(),
       );
-    } catch (e) {
+    } on DioException {
       final cached = await local.getCurrencies();
+
+      if (cached.isEmpty) {
+        throw Exception("No internet connection and no cached data.");
+      }
 
       return CurrencyResult(
         currencies: cached,

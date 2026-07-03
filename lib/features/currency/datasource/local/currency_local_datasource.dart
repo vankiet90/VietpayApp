@@ -7,17 +7,21 @@ class CurrencyLocalDatasource {
   CurrencyLocalDatasource(this.database);
 
   Future<void> saveCurrencies(List<CurrencyModel> currencies) async {
-    await database.batch((batch) {
-      batch.insertAll(
-        database.currencyTable,
-        currencies.map((currency) {
-          return CurrencyTableCompanion.insert(
-            code: currency.code,
-            rate: currency.rate,
-            updatedAt: currency.updatedAt,
-          );
-        }).toList(),
-      );
+    await database.transaction(() async {
+      await database.delete(database.currencyTable).go();
+
+      await database.batch((batch) {
+        batch.insertAll(
+          database.currencyTable,
+          currencies.map((currency) {
+            return CurrencyTableCompanion.insert(
+              code: currency.code,
+              rate: currency.rate,
+              updatedAt: currency.updatedAt,
+            );
+          }).toList(),
+        );
+      });
     });
   }
 
