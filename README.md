@@ -8,25 +8,17 @@ The application demonstrates an **Offline-First Architecture**, allowing users t
 
 # Features
 
-- 🌍 Fetch real-time exchange rates from CurrencyFreaks API
-- 💾 Offline-first architecture using Drift (SQLite)
-- 🔄 Automatic fallback to cached data when offline
-- 💱 Currency converter with live calculation
-- ⭐ Saved Currency dashboard (JPY → USD)
-- 🕒 Last Updated timestamp
-- 📱 Material 3 UI
-- 🌙 Dark Mode & Light Mode support
-- 🏗 MVVM + Repository + BLoC architecture
-- 💉 Dependency Injection with GetIt
-- 🧪 Unit Test, Bloc Test and Widget Test
-
----
-
-# Screenshots
-
-| Light Mode | Dark Mode |
-|------------|-----------|
-| *(Add screenshot here)* | *(Add screenshot here)* |
+- Fetch real-time exchange rates from CurrencyFreaks API
+- Offline-first architecture using Drift (SQLite)
+- Automatic fallback to cached data when offline
+- Currency converter with live calculation
+- aved Currency dashboard (JPY → USD)
+- Last Updated timestamp
+- Material 3 UI
+- Dark Mode & Light Mode support
+- MVVM + Repository + BLoC architecture
+- Dependency Injection with GetIt
+- Unit Test, Bloc Test and Widget Test
 
 ---
 
