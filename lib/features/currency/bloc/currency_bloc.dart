@@ -28,7 +28,7 @@ class CurrencyBloc extends Bloc<CurrencyEvent, CurrencyState> {
         ),
       );
     } catch (e) {
-      emit(CurrencyError(e.toString()));
+      emit(CurrencyError(message: e.toString()));
     }
   }
 }

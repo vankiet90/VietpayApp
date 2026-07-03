@@ -30,9 +30,10 @@ class CurrencyLoaded extends CurrencyState {
 
 class CurrencyError extends CurrencyState {
   final String message;
+  final bool canRetry;
 
-  const CurrencyError(this.message);
+  const CurrencyError({required this.message, this.canRetry = true});
 
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [message, canRetry];
 }

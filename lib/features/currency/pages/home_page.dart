@@ -42,8 +42,28 @@ class HomeView extends StatelessWidget {
           if (state is CurrencyError) {
             return Center(
               child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Text(state.message, textAlign: TextAlign.center),
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.cloud_off, size: 64, color: Colors.orange),
+                    const SizedBox(height: 16),
+                    Text(
+                      state.message,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        context.read<CurrencyBloc>().add(
+                          const LoadCurrencies(),
+                        );
+                      },
+                      child: const Text("Retry"),
+                    ),
+                  ],
+                ),
               ),
             );
           }
