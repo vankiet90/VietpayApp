@@ -52,6 +52,7 @@ lib
 
 # Dependency Flow
 
+```
 UI
 |
 BLoC
@@ -64,6 +65,7 @@ Remote Local
 DataSource DataSource
 |
 Dio Drift
+```
 
 ---
 
