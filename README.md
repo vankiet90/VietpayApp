@@ -54,17 +54,17 @@ lib
 
 ```
 UI
-|
+ |
 BLoC
-|
+ |
 Repository
-|
+ |
 +----------------+
-| |
-Remote Local
-DataSource DataSource
-|
-Dio Drift
+|                |
+Remote       Local
+DataSource   DataSource
+ |
+Dio          Drift
 ```
 
 ---
