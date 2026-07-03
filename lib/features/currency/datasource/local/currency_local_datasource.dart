@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import '../../../../core/database/app_database.dart';
 import '../../models/currency_model.dart';
 
@@ -8,8 +9,6 @@ class CurrencyLocalDatasource {
 
   Future<void> saveCurrencies(List<CurrencyModel> currencies) async {
     await database.transaction(() async {
-      await database.delete(database.currencyTable).go();
-
       await database.batch((batch) {
         batch.insertAll(
           database.currencyTable,
@@ -20,6 +19,7 @@ class CurrencyLocalDatasource {
               updatedAt: currency.updatedAt,
             );
           }).toList(),
+          mode: InsertMode.insertOrReplace,
         );
       });
     });

@@ -9,10 +9,10 @@ The application demonstrates an **Offline-First Architecture**, allowing users t
 # Features
 
 - Fetch real-time exchange rates from CurrencyFreaks API
-- Offline-first architecture using Drift (SQLite)
+- Offline-first architecture using Drift (SQLite) with insert-or-replace cache strategy
 - Automatic fallback to cached data when offline
 - Currency converter with live calculation
-- aved Currency dashboard (JPY → USD)
+- Saved Currency dashboard (JPY → USD)
 - Last Updated timestamp
 - Material 3 UI
 - Dark Mode & Light Mode support
@@ -50,6 +50,24 @@ lib
 
 ---
 
+# Dependency Flow
+
+UI
+|
+BLoC
+|
+Repository
+|
++----------------+
+| |
+Remote Local
+DataSource DataSource
+|
+Dio Drift
+
+---
+
+
 # Tech Stack
 
 | Technology | Usage |
@@ -74,7 +92,13 @@ lib
 Application Launch
         │
         ▼
- Fetch Latest Rates
+Load Local Cache
+        │
+        ▼
+Display Cached Data
+        │
+        ▼
+Fetch Latest Rates
         │
  ┌──────┴──────┐
  │             │
@@ -82,10 +106,10 @@ Application Launch
 Success      Failed
  │             │
  ▼             ▼
-Save Cache   Load Cache
- │             │
- ▼             ▼
-Show Data   Show Cached Data
+Update Cache  Keep Existing Cache
+ │
+ ▼
+Refresh UI
 ```
 
 When the device is offline:
@@ -98,33 +122,11 @@ When the device is offline:
 
 # Testing
 
-The project includes multiple testing layers:
+The project includes:
 
-### Repository Tests
-
-- API success
-- API failure
-- Load cached data
-- Empty cache
-- Save cache
-- Read cache
-
-### Bloc Tests
-
-- Initial state
-- Loading state
-- Loaded state
-- Error state
-- Retry flow
-
-### Widget Tests
-
-- Saved Currency Card
-- Currency List
-- Converter Section
-- Offline Banner
-- Last Updated Widget
-- User interactions
+- Repository unit tests
+- BLoC state tests
+- Widget interaction tests
 
 Run all tests:
 
