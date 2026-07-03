@@ -10,14 +10,22 @@ class CurrencyItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      key: Key(currency.code),
-      leading: CircleAvatar(child: Text(currency.code.substring(0, 1))),
+      key: Key("currency_${currency.code}"),
+
+      leading: CircleAvatar(
+        key: Key("currency_avatar_${currency.code}"),
+        child: Text(currency.code.substring(0, 1)),
+      ),
+
       title: Text(
         currency.code,
+        key: Key("currency_code_${currency.code}"),
         style: const TextStyle(fontWeight: FontWeight.w600),
       ),
+
       trailing: Text(
         currency.rate.toString(),
+        key: Key("currency_rate_${currency.code}"),
         style: const TextStyle(fontWeight: FontWeight.bold),
       ),
     );

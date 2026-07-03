@@ -122,6 +122,7 @@ class _ConverterSectionState extends State<ConverterSection> {
                     items: widget.currencies
                         .map(
                           (currency) => DropdownMenuItem(
+                            key: Key("from_${currency.code}"),
                             value: currency,
 
                             child: Text(currency.code),
@@ -176,6 +177,7 @@ class _ConverterSectionState extends State<ConverterSection> {
                     items: widget.currencies
                         .map(
                           (currency) => DropdownMenuItem(
+                            key: Key("to_${currency.code}"),
                             value: currency,
 
                             child: Text(currency.code),
@@ -213,6 +215,7 @@ class _ConverterSectionState extends State<ConverterSection> {
 
             Text(
               "${amountController.text} ${fromCurrency.code}",
+              key: const Key("input_summary"),
               style: Theme.of(context).textTheme.bodyMedium,
             ),
 
@@ -235,6 +238,7 @@ class _ConverterSectionState extends State<ConverterSection> {
                   children: [
                     Text(
                       _formatter.format(_convertedAmount),
+                      key: const Key("converted_amount"),
                       style: const TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
@@ -245,6 +249,7 @@ class _ConverterSectionState extends State<ConverterSection> {
 
                     Text(
                       toCurrency.code,
+                      key: const Key("converted_currency"),
                       style: const TextStyle(fontSize: 18, color: Colors.grey),
                     ),
                   ],

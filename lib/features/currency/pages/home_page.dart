@@ -36,7 +36,11 @@ class HomeView extends StatelessWidget {
       body: BlocBuilder<CurrencyBloc, CurrencyState>(
         builder: (context, state) {
           if (state is CurrencyLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(
+              child: CircularProgressIndicator(
+                key: const Key("loading_indicator"),
+              ),
+            );
           }
 
           if (state is CurrencyError) {
@@ -50,11 +54,13 @@ class HomeView extends StatelessWidget {
                     const SizedBox(height: 16),
                     Text(
                       state.message,
+                      key: const Key("error_text"),
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton(
+                      key: const Key("retry_button"),
                       onPressed: () {
                         context.read<CurrencyBloc>().add(
                           const LoadCurrencies(),

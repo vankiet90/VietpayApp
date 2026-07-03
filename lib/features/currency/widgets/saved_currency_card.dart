@@ -29,6 +29,7 @@ class SavedCurrencyCard extends StatelessWidget {
           children: [
             Text(
               "Saved Currency",
+              key: const Key("saved_currency_title"),
               style: Theme.of(context).textTheme.titleMedium,
             ),
 
@@ -45,6 +46,7 @@ class SavedCurrencyCard extends StatelessWidget {
 
                 Text(
                   jpy.code,
+                  key: const Key("saved_currency_code"),
                   style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -59,6 +61,7 @@ class SavedCurrencyCard extends StatelessWidget {
 
                 const Text(
                   "USD",
+                  key: Key("saved_currency_target"),
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
               ],
@@ -68,6 +71,7 @@ class SavedCurrencyCard extends StatelessWidget {
 
             Text(
               "1 ${jpy.code} = ${usdRate.toStringAsFixed(6)} USD",
+              key: const Key("saved_currency_rate"),
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           ],
